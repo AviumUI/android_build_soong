@@ -18,6 +18,8 @@ import (
 	"strings"
 
 	"android/soong/android"
+
+	cc_config "android/soong/cc/config"
 )
 
 var (
@@ -61,6 +63,7 @@ func init() {
 type toolchainX86_64 struct {
 	toolchain64Bit
 	toolchainRustFlags string
+	lldflags string
 }
 
 func (t *toolchainX86_64) RustTriple() string {
@@ -100,7 +103,10 @@ func x86_64ToolchainFactory(arch android.Arch) Toolchain {
 		toolchainRustFlags = append(toolchainRustFlags, x86_64ArchFeatureRustFlags[feature]...)
 	}
 
+	cc_toolchain := cc_config.FindToolchain(android.Android, arch)
+
 	return &toolchainX86_64{
 		toolchainRustFlags: strings.Join(toolchainRustFlags, " "),
+		lldflags: strings.ReplaceAll(cc_toolchain.Lldflags(), "${config.", "${cc_config."),
 	}
 }
