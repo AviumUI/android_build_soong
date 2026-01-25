@@ -129,6 +129,8 @@ def parse_args():
 
   config["LineageDesc"] = config["BuildDesc"]
   config["LineageDevice"] = config["DeviceName"]
+  config["AviumSocName"] = ""
+  config["AviumDeviceName"] = ""
 
   if config["BuildNumber"].startswith("eng."):
     config["BuildNumber"] = config["DateUtc"]
@@ -248,7 +250,8 @@ def generate_build_info(args):
   # Only add _asan for a sanitized build if it isn't already a part of the
   # flavor (via a dedicated lunch config for example).
   print(f"ro.build.flavor={config['BuildFlavor']}")
-
+  print(f"ro.avium.soc.model={config['AviumSocName']}")
+  print(f"ro.avium.device.codename={config['AviumDeviceName']}")
   print(f"ro.lineage.device={config['LineageDevice']}")
 
   # These values are deprecated, use "ro.product.cpu.abilist"
